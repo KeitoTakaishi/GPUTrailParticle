@@ -1,0 +1,49 @@
+﻿#pragma kernel update
+#define BLOCK_SIZE 64
+#include "../Noise4d.cginc"
+
+RWStructuredBuffer<float3> positionBuffer;
+RWStructuredBuffer<float3> velocityBuffer;
+float dt;
+float time;
+
+[numthreads(BLOCK_SIZE, 1, 1)]
+
+void update(uint2 id : SV_DispatchThreadID)
+{
+	uint idx = id.x;
+	if (fmod(idx, BLOCK_SIZE) == 0) {
+		//top
+		float3 pos = positionBuffer[idx];
+		float3 vel = velocityBuffer[idx];
+		int row = (int)(idx / BLOCK_SIZE);
+
+		float3 freq = float3(0.01, 0.01, 0.01);
+		vel.xyz += 18.0 * float3(
+			snoise(float4(freq.x * pos.x, freq.y * pos.y, freq.z * pos.z, 722.5 + (idx + 1) + time)),
+			snoise(float4(freq.x * pos.x, freq.y * pos.y, freq.z * pos.z, 355.3 + (idx + 1) * 100.0 + time)),
+			snoise(float4(freq.x * pos.x, freq.y * pos.y, freq.z * pos.z, 125.9 + (idx + 1) * 200.0 + time)));
+
+
+		float3 bPos = pos - float3(0.0, 0.0, 0.0);
+
+		vel += -(bPos)* length(bPos) * 0.15;
+		vel.xyz *= 0.2 + abs(sin(row * 3234.0)) * 0.5;
+
+		/*
+		if (pos.y < -50.0) {
+			vel.y += 15.0;
+		}
+		else if (pos.y > 50.0) {
+			vel.y -= 15.0;
+		}
+		*/
+
+		pos += vel * 0.01;
+		velocityBuffer[idx] = vel;
+		positionBuffer[idx] = pos;
+	}
+	else {
+		positionBuffer[idx] = positionBuffer[idx - 1];
+	}
+}
