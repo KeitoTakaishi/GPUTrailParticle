@@ -60,12 +60,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\GPUTrail.cs" />
-    <None Include="Assets\Scenes\GPUTrailPartilce\Shaders\ComputeShader\TrailParticle.compute" />
-    <None Include="Assets\Scenes\GPUTrailPartilce\Shaders\Noise4d.cginc" />
-    <None Include="Assets\Scenes\GPUTrailPartilce\Shaders\Visual\Instancing_GPUTrailParticle.shader" />
-    <None Include="Assets\Scenes\GPUTrailPartilce\Shaders\utils.cginc" />
-    <None Include="Assets\Scenes\GPUTrailPartilce\Shaders\NoiseUtils.cginc" />
+    <Compile Include="Assets\CustomMeshTrail\Scripts\GPUPolygonTrail.cs" />
+    <Compile Include="Assets\GPUTrailPartilce\Scripts\GPUTrail.cs" />
+    <None Include="Assets\GPUTrailPartilce\Shaders\ComputeShader\TrailParticle.compute" />
+    <None Include="Assets\CustomMeshTrail\Shaders\ComputeShader\kernel.compute" />
+    <None Include="Assets\GPUTrailPartilce\Shaders\Noise4d.cginc" />
+    <None Include="Assets\CustomMeshTrail\Shaders\utils.cginc" />
+    <None Include="Assets\CustomMeshTrail\Shaders\Visual\CustomMeshTrailShader.shader" />
+    <None Include="Assets\GPUTrailPartilce\Shaders\Visual\Instancing_GPUTrailParticle.shader" />
+    <None Include="Assets\GPUTrailPartilce\Shaders\utils.cginc" />
+    <None Include="Assets\GPUTrailPartilce\Shaders\NoiseUtils.cginc" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>C:/Users/takai/Documents/UnityProjects/GPUTrailParticle/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>

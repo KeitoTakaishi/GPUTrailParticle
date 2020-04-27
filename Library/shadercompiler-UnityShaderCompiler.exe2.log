@@ -1,10 +1,8 @@
 Base path: C:/Program Files/Unity/Hub/Editor/2018.4.13f1/Editor/Data
 Cmd: initializeCompiler
 Cmd: compileComputeKernel
-  error: 2 plat 4 at TrailParticle.compute(3): failed to open source file: '../Noise4d.cginc'
-  api=4 insize=1223 outsize=0 ok=0
-Cmd: compileComputeKernel
-  api=4 insize=1223 outsize=20741 ok=1
+  error: 2 plat 4 at kernel.compute(23): undeclared identifier 'Result'
+  api=4 insize=621 outsize=0 ok=0
 Cmd: initializeCompiler
 Cmd: initializeCompiler
 Cmd: initializeCompiler
@@ -25,8 +23,14 @@ Cmd: initializeCompiler
 Cmd: initializeCompiler
 Cmd: initializeCompiler
 Cmd: initializeCompiler
-Cmd: compileComputeKernel
-  api=4 insize=1233 outsize=20565 ok=1
+Cmd: initializeCompiler
+Cmd: initializeCompiler
+Cmd: initializeCompiler
+Cmd: initializeCompiler
+Cmd: initializeCompiler
+Cmd: initializeCompiler
+Cmd: initializeCompiler
+Cmd: initializeCompiler
 Cmd: initializeCompiler
 Cmd: initializeCompiler
 Cmd: initializeCompiler
