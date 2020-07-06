@@ -1,0 +1,45 @@
+﻿#pragma kernel init
+#pragma kernel update
+#define GROUP_THREAD_SIZE 256
+#define THREAD [numthreads(GROUP_THREAD_SIZE,1,1)]
+#include "Noise4d.cginc"
+#include "NoiseUtils.cginc"
+
+
+RWStructuredBuffer<float3> positionBuffer;
+
+float time;
+
+THREAD
+void init(uint2 id : SV_DispatchThreadID, uint3 groupID : SV_GroupID, uint3 threadID : SV_GroupThreadID)
+{
+	uint idx = id.x;
+	//uint idx = threadID.x;
+	uint gid = groupID.x;
+	float _id = fmod(idx, GROUP_THREAD_SIZE);
+	positionBuffer[idx] = float3(gid * 10.0, 0.0, _id);
+	//velocityBuffer[idx] = float3(0.0, 0.0, 0.0);
+}	
+
+
+float4 target;
+THREAD
+void update(uint2 id : SV_DispatchThreadID)
+{
+	uint idx = id.x;
+
+	//update top
+	if (fmod(idx, GROUP_THREAD_SIZE) == 0) {
+
+		float3 pos = positionBuffer[idx];
+		float period = 0.01;
+		
+		positionBuffer[idx] =  curlNoise(float4(pos.x * 0.01, pos.y * 0.01, idx, time*0.01));
+		//velocityBuffer[idx] = float3(0.0, 0.0, 0.0);
+	}
+	else {
+		positionBuffer[idx] = positionBuffer[idx - 1];
+		//pulseBuffer[idx] = pulseBuffer[idx - 1];
+	}
+
+}

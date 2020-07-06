@@ -1,0 +1,77 @@
+﻿#pragma kernel init
+#pragma kernel update
+#define GROUP_THREAD_SIZE 4
+#define THREAD [numthreads(GROUP_THREAD_SIZE,1,1)]
+#include "Noise4d.cginc"
+#include "NoiseUtils.cginc"
+
+
+RWStructuredBuffer<float3> positionBuffer;
+RWStructuredBuffer<float3> initPositionBuffer;
+RWStructuredBuffer<float2> lifeBuffer;
+
+float time;
+float res_w;
+float radius;
+
+THREAD
+void init(uint2 id : SV_DispatchThreadID, uint3 groupID : SV_GroupID, uint3 threadID : SV_GroupThreadID)
+{
+	uint idx = id.x;
+	//uint idx = threadID.x;
+	uint gid = groupID.x;
+	
+	float _id = fmod(idx, GROUP_THREAD_SIZE);
+	res_w = 128.0;
+	
+	float2 pos = float2(fmod(gid, res_w), gid / res_w) * radius * 2.0;
+	float2 offSet = float2(res_w, res_w) * radius;
+	pos = pos - offSet;
+	positionBuffer[idx] = float3(pos.x, pos.y, _id);
+	initPositionBuffer[idx] = float3(pos.x, pos.y, _id);
+}	
+
+
+float4 target;
+THREAD
+void update(uint2 id : SV_DispatchThreadID, uint3 groupID : SV_GroupID, uint3 threadID : SV_GroupThreadID)
+{
+	//update 
+	uint idx = id.x;
+	uint gid = groupID.x;
+	float uniquwId = fmod(idx, GROUP_THREAD_SIZE);
+	
+
+	//先頭に関して行う処理
+	//座標更新
+	//life
+	
+	if (lifeBuffer[gid].x < 0.0) {
+		lifeBuffer[gid].x = lifeBuffer[gid].y;
+		positionBuffer[idx] = initPositionBuffer[idx];
+	}
+	else {
+		lifeBuffer[gid].x -= 0.01;
+	}
+	if (fmod(idx, GROUP_THREAD_SIZE) == 0) {
+		
+
+		float3 pos = positionBuffer[idx];
+		float period = 0.01;
+
+		//positionBuffer[idx] += 0.1 * curlNoise(float4(pos.x * period, pos.y * period, idx * 50.0, time*0.01));
+		//positionBuffer[idx] += max(lifeBuffer[gid].y - lifeBuffer[gid].x, 0.0)* 5.0 * curlNoise(float4(pos.x * period, pos.y * period, idx *0.1, time*0.01));
+		positionBuffer[idx] += 3.0 * curlNoise(float4(pos.x * period, pos.y * period, idx * 0.01, time*0.01));
+
+
+		
+	}
+	else {
+		positionBuffer[idx] = positionBuffer[idx - 1];
+		//pulseBuffer[idx] = pulseBuffer[idx - 1];
+	}
+	
+
+	
+	
+}

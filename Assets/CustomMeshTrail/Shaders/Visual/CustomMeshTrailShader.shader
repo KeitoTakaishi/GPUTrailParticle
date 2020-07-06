@@ -108,6 +108,7 @@
 		UNITY_INSTANCING_BUFFER_END(Props)
 
 		void surf(Input IN, inout SurfaceOutputStandard o)
+
 		{
 			float2 uv = IN.uv_MainTex;
 			fixed4 c = tex2D(_MainTex, uv) * _Color;

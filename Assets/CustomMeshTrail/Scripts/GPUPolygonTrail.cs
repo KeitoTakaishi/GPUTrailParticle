@@ -112,8 +112,8 @@ namespace CustomMeshTrail
             srcMesh.SetVertices(positionList);
             srcMesh.normals = normalList.ToArray();
             srcMesh.uv = uvList.ToArray();
-            //srcMesh.SetIndices(indexList.ToArray(), MeshTopology.Triangles, 0);
-            srcMesh.SetIndices(indexList.ToArray(), MeshTopology.LineStrip, 0);
+            srcMesh.SetIndices(indexList.ToArray(), MeshTopology.Triangles, 0);
+            //srcMesh.SetIndices(indexList.ToArray(), MeshTopology.LineStrip, 0);
         }
         //--------------------------------------------------------------------
         private void InitInstancingParameter()
